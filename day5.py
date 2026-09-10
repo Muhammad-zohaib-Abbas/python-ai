@@ -1,6 +1,8 @@
 import json
 import requests
+import httpx
 import asyncio
+import time
 product = {
     "name": "Watch",
     "price": 99,
@@ -127,11 +129,90 @@ except requests.RequestException  as error:
     print(error)
 
 
+async def get_user():
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            "https://jsonplaceholder.typicode.com/users/1"
+        )
+
+        response.raise_for_status()
+
+        user = response.json()
+
+        print("User:", user["name"])
+
+
+async def get_products():
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            "https://jsonplaceholder.typicode.com/posts"
+        )
+
+        response.raise_for_status()
+
+        products = response.json()
+
+        print("Products:", len(products))
+
+
+async def get_orders():
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            "https://jsonplaceholder.typicode.com/todos"
+        )
+
+        response.raise_for_status()
+
+        orders = response.json()
+
+        print("Orders:", len(orders))
+
+
+async def run_api_functions():
+    await asyncio.gather(
+        get_user(),
+        get_products(),
+        get_orders()
+    )
+
+
+asyncio.run(run_api_functions())
+
+
+
+
 # Exercise 4 — Async
 async def task(name, seconds):
     print(f"{name} started")
     await asyncio.sleep(seconds)
     print(f"{name} finished")
 
-asyncio.run(task("Task1", 2))
+# asyncio.run(task("Task1", 2))
 
+
+start = time.time()
+
+# asyncio.run(task("Task 1", 2))
+# asyncio.run(task("Task 2", 2))
+# asyncio.run(task("Task 3", 2))
+
+end = time.time()
+
+# print(f"Total time: {end - start:.2f} seconds")
+
+
+async def main():
+    await asyncio.gather(
+        task("Task 1", 2),
+        task("Task 2", 2),
+        task("Task 3", 2)
+    )
+
+
+# start = time.time()
+
+# asyncio.run(main())
+
+# end = time.time()
+
+# print(f"Total time: {end - start:.2f} seconds")
