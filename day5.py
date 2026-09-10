@@ -125,3 +125,13 @@ try:
 except requests.RequestException  as error:
     error = f"Request field: {error}"
     print(error)
+
+
+# Exercise 4 — Async
+async def task(name, seconds):
+    print(f"{name} started")
+    await asyncio.sleep(seconds)
+    print(f"{name} finished")
+
+asyncio.run(task("Task1", 2))
+
